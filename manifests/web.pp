@@ -467,7 +467,7 @@ class zabbix::web (
         if $enable_ldap_auth {
 #           $ldap_additional_includes = [ "${::zabbix::params::apache_confd}/zabbix-ldap.conf" ]
 #           $ldap_require = File["${::zabbix::params::apache_confd}/zabbix-ldap.conf"]
-           file { "${::zabbix::params::apache_confd}/zabbix-ldap.conf":
+           file { "/etc/apache2/conf.d/zabbix-ldap.conf":
               ensure  => present,
               owner   => 'root',
               group   => 'root',
