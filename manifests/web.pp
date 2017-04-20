@@ -219,6 +219,11 @@ class zabbix::web (
   $ldap_cacert                              = $zabbix::params::ldap_cacert,
   $ldap_clientcert                          = $zabbix::params::ldap_clientcert,
   $ldap_clientkey                           = $zabbix::params::ldap_clientkey,
+  $enable_ldap_auth                         = $zabbix::params::enable_ldap_auth,
+  $ldap_bind_dn                             = $zabbix::params::ldap_bind_dn,
+  $ldap_bind_password                       = $zabbix::params::ldap_bind_password,
+  $ldap_url                                 = $zabbix::params::ldap_url,
+  $ldap_bind_authoritative                  = $zabbix::params::ldap_bind_authoritative,
   $puppetgem                                = $zabbix::params::puppetgem,
 ) inherits zabbix::params {
 
@@ -459,6 +464,17 @@ class zabbix::web (
       ssl_cipher      => $apache_ssl_cipher,
       ssl_chain       => $apache_ssl_chain,
       require         => Package[$zabbix_web_package],
+        if $enable_ldap_auth {
+           $ldap_additional_includes = [ "${::zabbix::params::apache_confd}/zabbix-ldap.conf" ]
+           $ldap_require = File["${::zabbix::params::apache_confd}/zabbix-ldap.conf"]
+           file { "${::zabbix::params::apache_confd}/zabbix-ldap.conf":
+              ensure  => present,
+              owner   => 'root',
+              group   => 'root',
+              content => template('puppetboard/apache/ldap.erb'),
+              notify  => Service[$::zabbix::params::apache_service],
+    }
+  }
     }
   } # END if $manage_vhost
 
