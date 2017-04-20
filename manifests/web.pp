@@ -466,7 +466,17 @@ class zabbix::web (
       require         => Package[$zabbix_web_package],
     }
   } # END if $manage_vhost
-
+  if $enable_ldap_auth {
+#           $ldap_additional_includes = [ "${::zabbix::params::apache_confd}/zabbix-ldap.conf" ]
+#           $ldap_require = File["${::zabbix::params::apache_confd}/zabbix-ldap.conf"]
+           file { "/etc/apache2/conf.d/zabbix-ldap.conf":
+              ensure  => present,
+              owner   => 'root',
+              group   => 'root',
+              content => template('zabbix-apache-ldap.erb'),
+#              notify  => Service[$::zabbix::params::apache_service],
+      }
+    }
   # check if selinux is active and allow zabbix
   if $::osfamily == 'RedHat' and getvar('::selinux_config_mode') == 'enforcing' {
     selboolean{'httpd_can_connect_zabbix':
