@@ -97,6 +97,11 @@ class zabbix::params {
   $ldap_cacert                              = undef
   $ldap_clientcert                          = undef
   $ldap_clientkey                           = undef
+  $enable_ldap_auth                         = false
+  $ldap_bind_dn                             = undef
+  $ldap_bind_password                       = undef
+  $ldap_url                                 = undef
+  $ldap_bind_authoritative                  = undef
   $server_api_pass                          = 'zabbix'
   $server_api_user                          = 'Admin'
 
