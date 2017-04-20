@@ -473,7 +473,7 @@ class zabbix::web (
               ensure  => present,
               owner   => 'root',
               group   => 'root',
-              content => template('zabbix-apache-ldap.erb'),
+              content => template('zabbix/zabbix-apache-ldap.erb'),
 #              notify  => Service[$::zabbix::params::apache_service],
       }
     }
